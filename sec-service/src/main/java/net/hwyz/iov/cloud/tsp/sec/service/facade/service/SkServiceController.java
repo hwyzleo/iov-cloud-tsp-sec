@@ -8,6 +8,8 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Map;
+
 /**
  * 密钥相关服务接口实现类
  *
@@ -27,9 +29,9 @@ public class SkServiceController {
      * @param vin 车架号
      */
     @PutMapping("/generateVehicleSk/{vin}")
-    public void generateVehicleSk(@PathVariable String vin) {
+    public Map<String, String> generateVehicleSk(@PathVariable String vin) {
         logger.info("生成车辆[{}]密钥", vin);
-        skAppService.generateVehicleSk(vin);
+        return skAppService.generateVehicleSk(vin);
     }
 
 }

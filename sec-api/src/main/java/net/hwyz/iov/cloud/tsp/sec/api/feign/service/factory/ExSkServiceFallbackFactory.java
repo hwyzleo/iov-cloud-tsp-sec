@@ -5,6 +5,8 @@ import net.hwyz.iov.cloud.tsp.sec.api.feign.service.ExSkService;
 import org.springframework.cloud.openfeign.FallbackFactory;
 import org.springframework.stereotype.Component;
 
+import java.util.Map;
+
 /**
  * 密钥相关服务降级处理
  *
@@ -18,8 +20,9 @@ public class ExSkServiceFallbackFactory implements FallbackFactory<ExSkService> 
     public ExSkService create(Throwable throwable) {
         return new ExSkService() {
             @Override
-            public void generateVehicleSk(String vin) {
+            public Map<String, String> generateVehicleSk(String vin) {
                 logger.error("安全服务生成车辆[{}]密钥调用失败", vin, throwable);
+                return null;
             }
         };
     }

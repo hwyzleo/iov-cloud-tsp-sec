@@ -6,6 +6,8 @@ import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
 
+import java.util.Map;
+
 /**
  * 密钥相关服务接口
  */
@@ -18,6 +20,6 @@ public interface ExSkService {
      * @param vin 车架号
      */
     @PutMapping("/generateVehicleSk/{vin}")
-    void generateVehicleSk(@PathVariable String vin);
+    Map<String, String> generateVehicleSk(@PathVariable String vin);
 
 }

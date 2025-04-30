@@ -9,6 +9,7 @@ import net.hwyz.iov.cloud.tsp.sec.service.infrastructure.repository.dao.VehSkDao
 import net.hwyz.iov.cloud.tsp.sec.service.infrastructure.repository.po.VehSkPo;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
 
@@ -28,15 +29,20 @@ public class SkAppService {
      * 生成车辆相关密钥
      *
      * @param vin 车架号
+     * @return 密钥Map
      */
-    public void generateVehicleSk(String vin) {
+    public Map<String, String> generateVehicleSk(String vin) {
+        Map<String, String> skMap = new HashMap<>();
         if (getVehicleSk(vin).size() == 0) {
+            String tboxSk = HexUtil.encodeHexStr(RandomUtil.randomBytes(16));
             vehSkDao.insertPo(VehSkPo.builder()
                     .vin(vin)
                     .type(VehicleSkType.TBOX_SK.name())
-                    .value(HexUtil.encodeHexStr(RandomUtil.randomBytes(16)))
+                    .value(tboxSk)
                     .build());
+            skMap.put(VehicleSkType.TBOX_SK.name(), tboxSk);
         }
+        return skMap;
     }
 
     /**
