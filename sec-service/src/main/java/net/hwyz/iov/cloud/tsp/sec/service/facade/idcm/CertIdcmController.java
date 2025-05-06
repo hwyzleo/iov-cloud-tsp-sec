@@ -38,7 +38,7 @@ public class CertIdcmController implements CertTboxApi {
     public CertificateResponse apply(@RequestHeader String vin, @RequestHeader String clientId,
                                      @RequestBody @Valid CertificateSigningRequest csr) {
         logger.info("车辆[{}]信息娱乐模块[{}]申请证书", vin, clientId);
-        return certAppService.apply(vin, clientId, ClientType.IDCM);
+        return certAppService.apply(vin, clientId, ClientType.IDCM, csr);
     }
 
     /**

@@ -38,7 +38,7 @@ public class CertTboxController implements CertTboxApi {
     public CertificateResponse apply(@RequestHeader String vin, @RequestHeader String clientId,
                                      @RequestBody @Valid CertificateSigningRequest csr) {
         logger.info("车辆[{}]车联终端[{}]申请证书", vin, clientId);
-        return certAppService.apply(vin, clientId, ClientType.TBOX);
+        return certAppService.apply(vin, clientId, ClientType.TBOX, csr);
     }
 
     /**

@@ -38,7 +38,7 @@ public class CertAdcmController implements CertAdcmApi {
     public CertificateResponse apply(@RequestHeader String vin, @RequestHeader String clientId,
                                      @RequestBody @Valid CertificateSigningRequest csr) {
         logger.info("车辆[{}]智驾模块[{}]申请证书", vin, clientId);
-        return certAppService.apply(vin, clientId, ClientType.ADCM);
+        return certAppService.apply(vin, clientId, ClientType.ADCM, csr);
     }
 
     /**

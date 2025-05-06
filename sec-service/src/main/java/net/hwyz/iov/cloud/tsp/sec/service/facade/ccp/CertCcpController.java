@@ -38,7 +38,7 @@ public class CertCcpController implements CertCcpApi {
     public CertificateResponse apply(@RequestHeader String vin, @RequestHeader String clientId,
                                      @RequestBody @Valid CertificateSigningRequest csr) {
         logger.info("车辆[{}]中央计算平台[{}]申请证书", vin, clientId);
-        return certAppService.apply(vin, clientId, ClientType.CCP);
+        return certAppService.apply(vin, clientId, ClientType.CCP, csr);
     }
 
     /**
