@@ -69,6 +69,7 @@ public class CertAppService {
             case TBOX -> ecuType = EcuType.TBOX;
             case CCP -> ecuType = EcuType.CCP;
             case IDCM -> ecuType = EcuType.IDCM;
+            case ADCM -> ecuType = EcuType.ADCM;
         }
         if (ecuType == null || exVehiclePartService.getPartBySn(ecuType, sn) == null) {
             throw new PartNotExistException(clientType, sn);
