@@ -4,7 +4,7 @@ import net.hwyz.iov.cloud.tsp.sec.api.contract.request.CertificateSigningRequest
 import net.hwyz.iov.cloud.tsp.sec.api.contract.response.CertificateResponse;
 
 /**
- * 证书中央计算平台接口
+ * 证书相关中央计算平台接口
  *
  * @author hwyz_leo
  */

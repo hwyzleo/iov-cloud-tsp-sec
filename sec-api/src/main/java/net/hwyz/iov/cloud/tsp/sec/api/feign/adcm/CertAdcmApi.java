@@ -1,14 +1,14 @@
-package net.hwyz.iov.cloud.tsp.sec.api.feign.tbox;
+package net.hwyz.iov.cloud.tsp.sec.api.feign.adcm;
 
 import net.hwyz.iov.cloud.tsp.sec.api.contract.request.CertificateSigningRequest;
 import net.hwyz.iov.cloud.tsp.sec.api.contract.response.CertificateResponse;
 
 /**
- * 证书相关车联终端接口
+ * 证书相关智驾模块接口
  *
  * @author hwyz_leo
  */
-public interface CertTboxApi {
+public interface CertAdcmApi {
 
     /**
      * 申请证书

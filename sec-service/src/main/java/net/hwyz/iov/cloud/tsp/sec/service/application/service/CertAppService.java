@@ -6,6 +6,7 @@ import net.hwyz.iov.cloud.framework.common.enums.ClientType;
 import net.hwyz.iov.cloud.framework.common.enums.EcuType;
 import net.hwyz.iov.cloud.tsp.sec.api.contract.response.CertificateResponse;
 import net.hwyz.iov.cloud.tsp.sec.service.infrastructure.exception.PartNotExistException;
+import net.hwyz.iov.cloud.tsp.vmd.api.feign.service.ExVehicleLifecycleService;
 import net.hwyz.iov.cloud.tsp.vmd.api.feign.service.ExVehiclePartService;
 import org.springframework.stereotype.Service;
 
@@ -20,6 +21,7 @@ import org.springframework.stereotype.Service;
 public class CertAppService {
 
     private final ExVehiclePartService exVehiclePartService;
+    private final ExVehicleLifecycleService exVehicleLifecycleService;
 
     /**
      * 申请证书
@@ -33,6 +35,12 @@ public class CertAppService {
         checkPartExist(clientType, deviceId);
         // TODO 调用 PKI 生成证书
         CertificateResponse response = new CertificateResponse();
+        switch (clientType) {
+            case TBOX -> exVehicleLifecycleService.recordApplyTboxCertNode(vin);
+            case CCP -> exVehicleLifecycleService.recordApplyCcpCertNode(vin);
+            case IDCM -> exVehicleLifecycleService.recordApplyIdcmCertNode(vin);
+            case ADCM -> exVehicleLifecycleService.recordApplyAdcmCertNode(vin);
+        }
         return response;
     }
 
