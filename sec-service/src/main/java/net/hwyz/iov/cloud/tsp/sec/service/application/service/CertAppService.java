@@ -38,10 +38,10 @@ public class CertAppService {
         // TODO 调用 PKI 生成证书
         CertificateResponse response = new CertificateResponse();
         switch (clientType) {
-            case TBOX -> exVehicleLifecycleService.recordApplyTboxCertNode(vin);
-            case CCP -> exVehicleLifecycleService.recordApplyCcpCertNode(vin);
-            case IDCM -> exVehicleLifecycleService.recordApplyIdcmCertNode(vin);
-            case ADCM -> exVehicleLifecycleService.recordApplyAdcmCertNode(vin);
+            case TBOX -> exVehicleLifecycleService.recordFirstApplyTboxCertNode(vin);
+            case CCP -> exVehicleLifecycleService.recordFirstApplyCcpCertNode(vin);
+            case IDCM -> exVehicleLifecycleService.recordFirstApplyIdcmCertNode(vin);
+            case ADCM -> exVehicleLifecycleService.recordFirstApplyAdcmCertNode(vin);
         }
         return response;
     }

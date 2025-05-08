@@ -18,6 +18,7 @@ import net.hwyz.iov.cloud.tsp.sec.service.infrastructure.repository.po.VehSkPo;
 import net.hwyz.iov.cloud.tsp.sec.service.infrastructure.util.EncryptUtil;
 import net.hwyz.iov.cloud.tsp.sec.service.infrastructure.util.SignUtil;
 import net.hwyz.iov.cloud.tsp.vmd.api.contract.VehiclePartExService;
+import net.hwyz.iov.cloud.tsp.vmd.api.feign.service.ExVehicleLifecycleService;
 import net.hwyz.iov.cloud.tsp.vmd.api.feign.service.ExVehiclePartService;
 import org.springframework.stereotype.Service;
 
@@ -41,6 +42,7 @@ public class SkAppService {
     private final SignUtil signUtil;
     private final EncryptUtil encryptUtil;
     private final ExVehiclePartService expVehiclePartService;
+    private final ExVehicleLifecycleService exVehicleLifecycleService;
 
     /**
      * 生成车辆相关密钥
@@ -81,10 +83,17 @@ public class SkAppService {
             case ADCM -> sk = generateSk(vin, VehicleSkType.ADCM_COMM_SK, 16);
             default -> throw new ClientTypeInvalidException(clientType);
         }
-        return SecretKeyResponse.builder()
+        SecretKeyResponse response = SecretKeyResponse.builder()
                 .encryptedSk(encryptUtil.asymmetricEncryptByCert(certInfo, sk))
                 .expireTime(System.currentTimeMillis() + COMM_SK_EXPIRE_MILLISECONDS)
                 .build();
+        switch (clientType) {
+            case TBOX -> exVehicleLifecycleService.recordFirstApplyTboxCommSkNode(vin);
+            case CCP -> exVehicleLifecycleService.recordFirstApplyCcpCommSkNode(vin);
+            case IDCM -> exVehicleLifecycleService.recordFirstApplyIdcmCommSkNode(vin);
+            case ADCM -> exVehicleLifecycleService.recordFirstApplyAdcmCommSkNode(vin);
+        }
+        return response;
     }
 
     /**
