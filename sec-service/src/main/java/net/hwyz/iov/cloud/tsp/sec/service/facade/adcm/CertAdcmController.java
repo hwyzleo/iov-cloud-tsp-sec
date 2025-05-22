@@ -8,10 +8,7 @@ import net.hwyz.iov.cloud.tsp.sec.api.contract.request.CertificateSigningRequest
 import net.hwyz.iov.cloud.tsp.sec.api.contract.response.CertificateResponse;
 import net.hwyz.iov.cloud.tsp.sec.api.feign.adcm.CertAdcmApi;
 import net.hwyz.iov.cloud.tsp.sec.service.application.service.CertAppService;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestHeader;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * 证书相关智驾模块接口实现类
@@ -35,6 +32,7 @@ public class CertAdcmController implements CertAdcmApi {
      * @return 证书
      */
     @Override
+    @PostMapping("/apply")
     public CertificateResponse apply(@RequestHeader String vin, @RequestHeader String clientId,
                                      @RequestBody @Valid CertificateSigningRequest csr) {
         logger.info("车辆[{}]智驾模块[{}]申请证书", vin, clientId);
@@ -50,6 +48,7 @@ public class CertAdcmController implements CertAdcmApi {
      * @return 证书
      */
     @Override
+    @PostMapping("/renew")
     public CertificateResponse renew(@RequestHeader String vin, @RequestHeader String clientId,
                                      @RequestBody @Valid CertificateSigningRequest csr) {
         logger.info("车辆[{}]智驾模块[{}]更新证书", vin, clientId);
