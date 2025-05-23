@@ -17,6 +17,9 @@
     <properties>
         <sec.version>0.0.1-SNAPSHOT</sec.version>
         <vmd.version>0.0.1-SNAPSHOT</vmd.version>
+        <tbox.version>0.0.1-SNAPSHOT</tbox.version>
+        <ccp.version>0.0.1-SNAPSHOT</ccp.version>
+        <idcm.version>0.0.1-SNAPSHOT</idcm.version>
     </properties>
 
     <dependencies>
@@ -29,6 +32,21 @@
             <groupId>net.hwyz.iov.cloud.tsp</groupId>
             <artifactId>vmd-api</artifactId>
             <version>${vmd.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>net.hwyz.iov.cloud.tsp</groupId>
+            <artifactId>tbox-api</artifactId>
+            <version>${tbox.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>net.hwyz.iov.cloud.tsp</groupId>
+            <artifactId>ccp-api</artifactId>
+            <version>${ccp.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>net.hwyz.iov.cloud.tsp</groupId>
+            <artifactId>idcm-api</artifactId>
+            <version>${idcm.version}</version>
         </dependency>
 
         <!-- 框架: 异常 -->

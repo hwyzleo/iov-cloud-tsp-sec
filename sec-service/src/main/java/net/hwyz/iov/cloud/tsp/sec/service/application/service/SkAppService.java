@@ -6,20 +6,16 @@ import cn.hutool.core.util.RandomUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import net.hwyz.iov.cloud.framework.common.enums.ClientType;
-import net.hwyz.iov.cloud.framework.common.enums.EcuType;
 import net.hwyz.iov.cloud.tsp.sec.api.contract.request.SecretKeyRequest;
 import net.hwyz.iov.cloud.tsp.sec.api.contract.response.SecretKeyResponse;
 import net.hwyz.iov.cloud.tsp.sec.service.domain.contract.enums.VehicleSkType;
 import net.hwyz.iov.cloud.tsp.sec.service.infrastructure.exception.ClientTypeInvalidException;
-import net.hwyz.iov.cloud.tsp.sec.service.infrastructure.exception.PartNotExistException;
-import net.hwyz.iov.cloud.tsp.sec.service.infrastructure.exception.VehiclePartNotMatchException;
 import net.hwyz.iov.cloud.tsp.sec.service.infrastructure.repository.dao.VehSkDao;
 import net.hwyz.iov.cloud.tsp.sec.service.infrastructure.repository.po.VehSkPo;
 import net.hwyz.iov.cloud.tsp.sec.service.infrastructure.util.EncryptUtil;
 import net.hwyz.iov.cloud.tsp.sec.service.infrastructure.util.SignUtil;
-import net.hwyz.iov.cloud.tsp.vmd.api.contract.VehiclePartExService;
 import net.hwyz.iov.cloud.tsp.vmd.api.feign.service.ExVehicleLifecycleService;
-import net.hwyz.iov.cloud.tsp.vmd.api.feign.service.ExVehiclePartService;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
@@ -41,8 +37,15 @@ public class SkAppService {
     private final VehSkDao vehSkDao;
     private final SignUtil signUtil;
     private final EncryptUtil encryptUtil;
-    private final ExVehiclePartService expVehiclePartService;
+    private final PartAppService partAppService;
     private final ExVehicleLifecycleService exVehicleLifecycleService;
+
+    /**
+     * 内部车辆集合
+     * 逗号分割
+     */
+    @Value("${biz.internal-vehicles:}")
+    private String internalVehicles;
 
     /**
      * 生成车辆相关密钥
@@ -73,8 +76,14 @@ public class SkAppService {
      * @return 密钥响应
      */
     public SecretKeyResponse generateVehicleClientCommSk(String vin, String clientId, ClientType clientType, SecretKeyRequest request) {
-        checkVehicleParkState(vin, clientId, clientType);
-        String certInfo = signUtil.p7AttachedVerify(request.getSignature());
+        partAppService.checkVehiclePartState(vin, clientId, clientType);
+        String certInfo;
+        if (ObjUtil.contains(internalVehicles.split(","), vin)) {
+            // 内部车辆则使用默认证书默认密钥
+            certInfo = "default";
+        } else {
+            certInfo = signUtil.p7AttachedVerify(request.getSignature());
+        }
         String sk;
         switch (clientType) {
             case TBOX -> sk = generateSk(vin, VehicleSkType.TBOX_COMM_SK, 16);
@@ -123,33 +132,6 @@ public class SkAppService {
                 .value(sk)
                 .build());
         return sk;
-    }
-
-    /**
-     * 检查车辆零部件状态
-     *
-     * @param vin        车架号
-     * @param sn         序列号
-     * @param clientType 客户端类型
-     */
-    private void checkVehicleParkState(String vin, String sn, ClientType clientType) {
-        EcuType ecuType = null;
-        switch (clientType) {
-            case TBOX -> ecuType = EcuType.TBOX;
-            case CCP -> ecuType = EcuType.CCP;
-            case IDCM -> ecuType = EcuType.IDCM;
-            case ADCM -> ecuType = EcuType.ADCM;
-        }
-        if (ObjUtil.isNull(ecuType)) {
-            throw new ClientTypeInvalidException(clientType);
-        }
-        VehiclePartExService part = expVehiclePartService.getPartBySn(ecuType, sn);
-        if (ObjUtil.isNull(part)) {
-            throw new PartNotExistException(clientType, sn);
-        }
-        if (!part.getVin().equals(vin)) {
-            throw new VehiclePartNotMatchException(clientType, sn, part.getVin(), vin);
-        }
     }
 
 }

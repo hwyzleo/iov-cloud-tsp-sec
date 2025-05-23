@@ -1,7 +1,11 @@
 package net.hwyz.iov.cloud.tsp.sec.service.infrastructure.util;
 
+import cn.hutool.core.util.HexUtil;
+import cn.hutool.crypto.symmetric.SymmetricAlgorithm;
+import cn.hutool.crypto.symmetric.SymmetricCrypto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 /**
@@ -15,6 +19,12 @@ import org.springframework.stereotype.Component;
 public class EncryptUtil {
 
     /**
+     * 默认密钥（Hex）
+     */
+    @Value("${biz.default-sk-hex}")
+    private String defaultSkHex;
+
+    /**
      * 通过证书的非对称加密
      *
      * @param certInfo  证书信息
@@ -22,8 +32,23 @@ public class EncryptUtil {
      * @return Hex密文
      */
     public String asymmetricEncryptByCert(String certInfo, String plaintext) {
+        if ("default".equals(certInfo)) {
+            return symmetricEncryptByDefaultSk(plaintext);
+        }
         // TODO 调用证书进行非对称加密
         return null;
+    }
+
+    /**
+     * 基于默认密钥的对称加密
+     * AES/ECB/PKCS5Padding
+     *
+     * @param plaintext Hex明文
+     * @return Hex密文
+     */
+    public String symmetricEncryptByDefaultSk(String plaintext) {
+        SymmetricCrypto aes = new SymmetricCrypto(SymmetricAlgorithm.AES, HexUtil.decodeHex(defaultSkHex));
+        return aes.encryptHex(plaintext);
     }
 
 }
