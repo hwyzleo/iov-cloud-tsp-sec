@@ -61,8 +61,8 @@ public class PartAppService {
             }
             case ADCM -> {
             }
+            default -> throw new ClientTypeInvalidException(clientType);
         }
-        throw new ClientTypeInvalidException(clientType);
     }
 
     /**
