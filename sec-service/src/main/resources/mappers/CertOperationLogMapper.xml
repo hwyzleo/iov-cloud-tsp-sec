@@ -19,24 +19,23 @@
         <result column="sn" property="sn" />
         <result column="template" property="template" />
         <result column="subject" property="subject" />
-        <result column="issuer" property="issuer" />
         <result column="csr" property="csr" />
     </resultMap>
 
     <!-- 通用查询结果列 -->
     <sql id="baseColumnList">
-        id, device_type, device_sn, device_key, device_operation, sn, template, subject, issuer, csr, 
+        id, device_type, device_sn, device_key, device_operation, sn, template, subject, csr,
         description, create_time, create_by, modify_time, modify_by, row_version, row_valid
     </sql>
 
     <!-- 插入 -->
     <insert id="insertPo" useGeneratedKeys="true" keyProperty="id">
         INSERT INTO tb_cert_operation_log (
-            id, device_type, device_sn, device_key, device_operation, sn, template, subject, issuer, csr, 
+            id, device_type, device_sn, device_key, device_operation, sn, template, subject, csr,
             description, create_time, create_by, modify_time, modify_by, row_version, row_valid
         )
         VALUES (
-            #{id}, #{deviceType}, #{deviceSn}, #{deviceKey}, #{deviceOperation}, #{sn}, #{template}, #{subject}, #{issuer}, #{csr}, 
+            #{id}, #{deviceType}, #{deviceSn}, #{deviceKey}, #{deviceOperation}, #{sn}, #{template}, #{subject}, #{csr},
             #{description}, now(), #{createBy}, now(), #{modifyBy}, 1, 1
         )
     </insert>
@@ -44,13 +43,13 @@
     <!-- 批量插入 -->
     <insert id="batchInsertPo" useGeneratedKeys="true" keyProperty="id" parameterType="java.util.List">
         INSERT INTO tb_cert_operation_log (
-            id, device_type, device_sn, device_key, device_operation, sn, template, subject, issuer, csr, 
+            id, device_type, device_sn, device_key, device_operation, sn, template, subject, csr,
             description, create_time, create_by, modify_time, modify_by, row_version, row_valid
         )
         VALUES
         <foreach collection="list" item="item" index="index" separator=",">
         (
-            #{item.id}, #{item.deviceType}, #{item.deviceSn}, #{item.deviceKey}, #{item.deviceOperation}, #{item.sn}, #{item.template}, #{item.subject}, #{item.issuer}, #{item.csr}, 
+            #{item.id}, #{item.deviceType}, #{item.deviceSn}, #{item.deviceKey}, #{item.deviceOperation}, #{item.sn}, #{item.template}, #{item.subject}, #{item.csr},
             #{item.description}, now(), #{item.createBy}, now(), #{item.modifyBy}, 1, 1
         )
         </foreach>
@@ -79,9 +78,6 @@
         </if>
         <if test="subject != null and subject != ''">
             t.subject = #{subject},
-        </if>
-        <if test="issuer != null and issuer != ''">
-            t.issuer = #{issuer},
         </if>
         <if test="csr != null and csr != ''">
             t.csr = #{csr},
@@ -148,9 +144,6 @@
         </if>
         <if test="subject != null and subject != ''">
             AND t.subject = #{subject}
-        </if>
-        <if test="issuer != null and issuer != ''">
-            AND t.issuer = #{issuer}
         </if>
         <if test="csr != null and csr != ''">
             AND t.csr = #{csr}

@@ -28,7 +28,6 @@ CREATE TABLE `db_sec`.`tb_cert_operation_log`
     `sn`               VARCHAR(100)          DEFAULT NULL COMMENT '证书序列号',
     `template`         VARCHAR(100) NOT NULL COMMENT '证书模板',
     `subject`          VARCHAR(255) NOT NULL COMMENT '证书主题',
-    `issuer`           VARCHAR(255) NOT NULL COMMENT '证书颁发者',
     `csr`              TEXT                  DEFAULT NULL COMMENT '证书请求',
     `description`      VARCHAR(255)          DEFAULT NULL COMMENT '备注',
     `create_time`      TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',

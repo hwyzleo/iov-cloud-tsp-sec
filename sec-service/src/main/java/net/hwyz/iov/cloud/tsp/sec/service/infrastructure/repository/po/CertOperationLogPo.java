@@ -76,12 +76,6 @@ public class CertOperationLogPo extends BasePo {
     private String subject;
 
     /**
-     * 证书颁发者
-     */
-    @TableField("issuer")
-    private String issuer;
-
-    /**
      * 证书请求
      */
     @TableField("csr")
