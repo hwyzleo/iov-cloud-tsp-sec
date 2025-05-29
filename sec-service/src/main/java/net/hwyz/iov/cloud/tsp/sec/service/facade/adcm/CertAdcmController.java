@@ -3,6 +3,7 @@ package net.hwyz.iov.cloud.tsp.sec.service.facade.adcm;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import net.hwyz.iov.cloud.framework.common.bean.Response;
 import net.hwyz.iov.cloud.framework.common.enums.ClientType;
 import net.hwyz.iov.cloud.tsp.sec.api.contract.request.CertificateSigningRequest;
 import net.hwyz.iov.cloud.tsp.sec.api.contract.response.CertificateResponse;
@@ -33,10 +34,10 @@ public class CertAdcmController implements CertAdcmApi {
      */
     @Override
     @PostMapping("/apply")
-    public CertificateResponse apply(@RequestHeader String vin, @RequestHeader String clientId,
-                                     @RequestBody @Valid CertificateSigningRequest csr) {
+    public Response<CertificateResponse> apply(@RequestHeader String vin, @RequestHeader String clientId,
+                                               @RequestBody @Valid CertificateSigningRequest csr) {
         logger.info("车辆[{}]智驾模块[{}]申请证书", vin, clientId);
-        return certAppService.apply(vin, clientId, ClientType.ADCM, csr);
+        return new Response<>(certAppService.apply(vin, clientId, ClientType.ADCM, csr));
     }
 
     /**
@@ -49,10 +50,10 @@ public class CertAdcmController implements CertAdcmApi {
      */
     @Override
     @PostMapping("/renew")
-    public CertificateResponse renew(@RequestHeader String vin, @RequestHeader String clientId,
-                                     @RequestBody @Valid CertificateSigningRequest csr) {
+    public Response<CertificateResponse> renew(@RequestHeader String vin, @RequestHeader String clientId,
+                                               @RequestBody @Valid CertificateSigningRequest csr) {
         logger.info("车辆[{}]智驾模块[{}]更新证书", vin, clientId);
-        return certAppService.renew(vin, clientId, ClientType.ADCM);
+        return new Response<>(certAppService.renew(vin, clientId, ClientType.ADCM));
     }
 
 }

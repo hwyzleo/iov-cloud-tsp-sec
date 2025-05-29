@@ -1,5 +1,6 @@
 package net.hwyz.iov.cloud.tsp.sec.api.feign.ccp;
 
+import net.hwyz.iov.cloud.framework.common.bean.Response;
 import net.hwyz.iov.cloud.tsp.sec.api.contract.request.SecretKeyRequest;
 import net.hwyz.iov.cloud.tsp.sec.api.contract.response.SecretKeyResponse;
 
@@ -18,6 +19,6 @@ public interface SkCcpApi {
      * @param request  密钥请求
      * @return 密钥响应
      */
-    SecretKeyResponse applyCommSk(String vin, String clientId, SecretKeyRequest request);
+    Response<SecretKeyResponse> applyCommSk(String vin, String clientId, SecretKeyRequest request);
 
 }

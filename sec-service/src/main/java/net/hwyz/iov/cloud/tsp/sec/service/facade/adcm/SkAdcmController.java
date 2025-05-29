@@ -2,6 +2,7 @@ package net.hwyz.iov.cloud.tsp.sec.service.facade.adcm;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import net.hwyz.iov.cloud.framework.common.bean.Response;
 import net.hwyz.iov.cloud.framework.common.enums.ClientType;
 import net.hwyz.iov.cloud.tsp.sec.api.contract.request.SecretKeyRequest;
 import net.hwyz.iov.cloud.tsp.sec.api.contract.response.SecretKeyResponse;
@@ -32,8 +33,8 @@ public class SkAdcmController implements SkIdcmApi {
      * @return 密钥响应
      */
     @Override
-    public SecretKeyResponse applyCommSk(String vin, String clientId, SecretKeyRequest request) {
+    public Response<SecretKeyResponse> applyCommSk(String vin, String clientId, SecretKeyRequest request) {
         logger.info("车辆[{}]智驾模块[{}]申请密钥", vin, clientId);
-        return skAppService.generateVehicleClientCommSk(vin, clientId, ClientType.ADCM, request);
+        return new Response<>(skAppService.generateVehicleClientCommSk(vin, clientId, ClientType.ADCM, request));
     }
 }

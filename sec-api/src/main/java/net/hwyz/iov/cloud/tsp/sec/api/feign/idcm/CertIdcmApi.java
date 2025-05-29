@@ -1,5 +1,6 @@
 package net.hwyz.iov.cloud.tsp.sec.api.feign.idcm;
 
+import net.hwyz.iov.cloud.framework.common.bean.Response;
 import net.hwyz.iov.cloud.tsp.sec.api.contract.request.CertificateSigningRequest;
 import net.hwyz.iov.cloud.tsp.sec.api.contract.response.CertificateResponse;
 
@@ -18,7 +19,7 @@ public interface CertIdcmApi {
      * @param csr      证书签名请求
      * @return 证书
      */
-    CertificateResponse apply(String vin, String clientId, CertificateSigningRequest csr);
+    Response<CertificateResponse> apply(String vin, String clientId, CertificateSigningRequest csr);
 
     /**
      * 更新证书
@@ -28,6 +29,6 @@ public interface CertIdcmApi {
      * @param csr      证书签名请求
      * @return 证书
      */
-    CertificateResponse renew(String vin, String clientId, CertificateSigningRequest csr);
+    Response<CertificateResponse> renew(String vin, String clientId, CertificateSigningRequest csr);
 
 }
