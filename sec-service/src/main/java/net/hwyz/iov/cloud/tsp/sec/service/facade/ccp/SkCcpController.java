@@ -1,5 +1,6 @@
 package net.hwyz.iov.cloud.tsp.sec.service.facade.ccp;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import net.hwyz.iov.cloud.framework.common.bean.Response;
@@ -8,8 +9,7 @@ import net.hwyz.iov.cloud.tsp.sec.api.contract.request.SecretKeyRequest;
 import net.hwyz.iov.cloud.tsp.sec.api.contract.response.SecretKeyResponse;
 import net.hwyz.iov.cloud.tsp.sec.api.feign.ccp.SkCcpApi;
 import net.hwyz.iov.cloud.tsp.sec.service.application.service.SkAppService;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * 密钥相关中央计算平台接口实现类
@@ -33,7 +33,9 @@ public class SkCcpController implements SkCcpApi {
      * @return 密钥响应
      */
     @Override
-    public Response<SecretKeyResponse> applyCommSk(String vin, String clientId, SecretKeyRequest request) {
+    @PostMapping("/applyCommSk")
+    public Response<SecretKeyResponse> applyCommSk(@RequestHeader String vin, @RequestHeader String clientId,
+                                                   @RequestBody @Valid SecretKeyRequest request) {
         logger.info("车辆[{}]中央计算平台[{}]申请密钥", vin, clientId);
         return new Response<>(skAppService.generateVehicleClientCommSk(vin, clientId, ClientType.CCP, request));
     }
