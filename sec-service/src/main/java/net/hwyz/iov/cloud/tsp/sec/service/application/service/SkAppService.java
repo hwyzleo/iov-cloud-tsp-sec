@@ -2,6 +2,7 @@ package net.hwyz.iov.cloud.tsp.sec.service.application.service;
 
 import cn.hutool.core.util.HexUtil;
 import cn.hutool.core.util.ObjUtil;
+import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.RandomUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -125,6 +126,11 @@ public class SkAppService {
      * @return 密钥
      */
     private String generateSk(String vin, VehicleSkType vehicleSkType, int skLength) {
+        VehSkPo vehSkPo = vehSkDao.selectLastPo(vin, vehicleSkType.name());
+        // 如果之前密钥是在10分钟内创建的，直接返回该密钥
+        if (ObjectUtil.isNotNull(vehSkPo) && vehSkPo.getCreateTime().getTime() + 10 * 60 * 1000 > System.currentTimeMillis()) {
+            return vehSkPo.getValue();
+        }
         String sk = HexUtil.encodeHexStr(RandomUtil.randomBytes(skLength));
         vehSkDao.insertPo(VehSkPo.builder()
                 .vin(vin)

@@ -15,4 +15,13 @@ import org.apache.ibatis.annotations.Mapper;
 @Mapper
 public interface VehSkDao extends BaseDao<VehSkPo, Long> {
 
+    /**
+     * 查询车辆指定类型最后的密钥
+     *
+     * @param vin  车架号
+     * @param type 密钥类型
+     * @return 车辆密钥
+     */
+    VehSkPo selectLastPo(String vin, String type);
+
 }

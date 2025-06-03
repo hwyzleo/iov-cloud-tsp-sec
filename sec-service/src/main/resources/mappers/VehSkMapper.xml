@@ -143,6 +143,16 @@
         ORDER BY t.id DESC
     </select>
 
+    <!-- 查询车辆指定类型最后的密钥 -->
+    <select id="selectLastPo" parameterType="java.util.Map" resultMap="baseResultMap">
+        SELECT <include refid="baseColumnList"/>
+        FROM tb_veh_sk t
+        WHERE t.row_valid = 1
+        AND t.vin = #{vin}
+        AND t.type = #{type}
+        LIMIT 1
+    </select>
+
     <!-- 根据Map对象统计记录数 -->
     <select id="countPoByMap" parameterType="java.util.Map" resultType="int">
         SELECT COUNT(*)
