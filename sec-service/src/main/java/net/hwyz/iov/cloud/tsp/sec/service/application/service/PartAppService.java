@@ -4,7 +4,6 @@ import cn.hutool.core.util.ObjUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import net.hwyz.iov.cloud.framework.common.enums.ClientType;
-import net.hwyz.iov.cloud.framework.common.util.StrUtil;
 import net.hwyz.iov.cloud.tsp.ccp.api.contract.VehicleCcpExService;
 import net.hwyz.iov.cloud.tsp.ccp.api.feign.service.ExCcpInfoService;
 import net.hwyz.iov.cloud.tsp.ccp.api.feign.service.ExVehicleCcpService;
@@ -75,29 +74,29 @@ public class PartAppService {
     public void checkVehiclePartState(String vin, String sn, ClientType clientType) {
         switch (clientType) {
             case TBOX -> {
-                VehicleTboxExService vehicleTbox = exVehicleTboxService.get(null, sn);
-                if (ObjUtil.isNull(vehicleTbox)) {
+                if (exTboxInfoService.getBySn(sn) == null) {
                     throw new PartNotExistException(clientType, sn);
                 }
-                if (StrUtil.isNotBlank(vehicleTbox.getVin()) && !vehicleTbox.getVin().equalsIgnoreCase(vin)) {
+                VehicleTboxExService vehicleTbox = exVehicleTboxService.get(null, sn);
+                if (ObjUtil.isNotNull(vehicleTbox) && !vehicleTbox.getVin().equalsIgnoreCase(vin)) {
                     throw new VehiclePartNotMatchException(clientType, sn, vehicleTbox.getVin(), vin);
                 }
             }
             case CCP -> {
-                VehicleCcpExService vehicleCcp = exVehicleCcpService.get(null, sn);
-                if (ObjUtil.isNull(vehicleCcp)) {
+                if (exCcpInfoService.getBySn(sn) == null) {
                     throw new PartNotExistException(clientType, sn);
                 }
-                if (StrUtil.isNotBlank(vehicleCcp.getVin()) && !vehicleCcp.getVin().equalsIgnoreCase(vin)) {
+                VehicleCcpExService vehicleCcp = exVehicleCcpService.get(null, sn);
+                if (ObjUtil.isNotNull(vehicleCcp) && !vehicleCcp.getVin().equalsIgnoreCase(vin)) {
                     throw new VehiclePartNotMatchException(clientType, sn, vehicleCcp.getVin(), vin);
                 }
             }
             case IDCM -> {
-                VehicleIdcmExService vehicleIdcm = exVehicleIdcmService.get(null, sn);
-                if (ObjUtil.isNull(vehicleIdcm)) {
+                if (exIdcmInfoService.getBySn(sn) == null) {
                     throw new PartNotExistException(clientType, sn);
                 }
-                if (StrUtil.isNotBlank(vehicleIdcm.getVin()) && !vehicleIdcm.getVin().equalsIgnoreCase(vin)) {
+                VehicleIdcmExService vehicleIdcm = exVehicleIdcmService.get(null, sn);
+                if (ObjUtil.isNotNull(vehicleIdcm) && !vehicleIdcm.getVin().equalsIgnoreCase(vin)) {
                     throw new VehiclePartNotMatchException(clientType, sn, vehicleIdcm.getVin(), vin);
                 }
             }
