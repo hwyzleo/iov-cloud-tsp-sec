@@ -150,6 +150,7 @@
         WHERE t.row_valid = 1
         AND t.vin = #{vin}
         AND t.type = #{type}
+        ORDER BY t.create_time DESC
         LIMIT 1
     </select>
 

@@ -129,6 +129,7 @@ public class SkAppService {
         VehSkPo vehSkPo = vehSkDao.selectLastPo(vin, vehicleSkType.name());
         // 如果之前密钥是在10分钟内创建的，直接返回该密钥
         if (ObjectUtil.isNotNull(vehSkPo) && vehSkPo.getCreateTime().getTime() + 10 * 60 * 1000 > System.currentTimeMillis()) {
+            logger.warn("车辆[{}]10分钟内重复创建密钥[{}]", vin, vehicleSkType);
             return vehSkPo.getValue();
         }
         String sk = HexUtil.encodeHexStr(RandomUtil.randomBytes(skLength));
