@@ -1,8 +1,9 @@
 package net.hwyz.iov.cloud.tsp.sec.service.infrastructure.util;
 
 import cn.hutool.core.util.HexUtil;
-import cn.hutool.crypto.symmetric.SymmetricAlgorithm;
-import cn.hutool.crypto.symmetric.SymmetricCrypto;
+import cn.hutool.crypto.Mode;
+import cn.hutool.crypto.Padding;
+import cn.hutool.crypto.symmetric.AES;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -41,13 +42,13 @@ public class EncryptUtil {
 
     /**
      * 基于默认密钥的对称加密
-     * AES/ECB/PKCS5Padding
+     * AES/CBC/PKCS5Padding
      *
      * @param plaintext Hex明文
      * @return Hex密文
      */
     public String symmetricEncryptByDefaultSk(String plaintext) {
-        SymmetricCrypto aes = new SymmetricCrypto(SymmetricAlgorithm.AES, HexUtil.decodeHex(defaultSkHex));
+        AES aes = new AES(Mode.CBC, Padding.PKCS5Padding, HexUtil.decodeHex(defaultSkHex));
         return aes.encryptHex(plaintext);
     }
 
