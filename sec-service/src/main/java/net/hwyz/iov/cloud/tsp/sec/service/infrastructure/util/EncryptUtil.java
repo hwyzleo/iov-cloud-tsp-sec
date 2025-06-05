@@ -24,11 +24,6 @@ public class EncryptUtil {
      */
     @Value("${biz.default-sk-hex}")
     private String defaultSkHex;
-    /**
-     * 默认IV（Hex）
-     */
-    @Value("${biz.default-iv-hex}")
-    private String defaultIvHex;
 
     /**
      * 通过证书的非对称加密
@@ -50,11 +45,13 @@ public class EncryptUtil {
      * AES/CBC/PKCS5Padding
      *
      * @param plaintext Hex明文
-     * @return Hex密文
+     * @return HexIV + Hex密文
      */
     public String symmetricEncryptByDefaultSk(String plaintext) {
-        AES aes = new AES(Mode.CBC, Padding.PKCS5Padding, HexUtil.decodeHex(defaultSkHex), HexUtil.decodeHex(defaultIvHex));
-        return aes.encryptHex(plaintext);
+        AES aes = new AES(Mode.CBC, Padding.PKCS5Padding, HexUtil.decodeHex(defaultSkHex));
+        String encryptHex = aes.encryptHex(plaintext);
+        String ivHex = HexUtil.encodeHexStr(aes.getCipher().getIV());
+        return ivHex + encryptHex;
     }
 
 }
